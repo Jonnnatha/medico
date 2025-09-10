@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('surgeries', \App\Http\Controllers\SurgeryController::class);
+    Route::post('surgeries/{surgery}/confirm', [\App\Http\Controllers\SurgeryController::class, 'confirm']);
+    Route::post('surgeries/{surgery}/cancel', [\App\Http\Controllers\SurgeryController::class, 'cancel']);
+});
