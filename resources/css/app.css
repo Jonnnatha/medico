@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+    --color-surgery-scheduled: #2563eb;
+    --color-surgery-confirmed: #16a34a;
+    --color-surgery-canceled: #dc2626;
+}
+
+.surgery-status-scheduled {
+    background-color: var(--color-surgery-scheduled);
+    color: #fff;
+}
+
+.surgery-status-confirmed {
+    background-color: var(--color-surgery-confirmed);
+    color: #fff;
+}
+
+.surgery-status-canceled {
+    background-color: var(--color-surgery-canceled);
+    color: #fff;
+}
+
+.badge-conflict {
+    background-color: var(--color-surgery-canceled);
+    color: #fff;
+}
