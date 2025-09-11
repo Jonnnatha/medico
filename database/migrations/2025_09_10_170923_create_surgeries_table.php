@@ -14,9 +14,14 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('doctor_id')->constrained('users');
             $table->string('patient_name');
+            $table->unsignedInteger('room');
             $table->timestamp('starts_at');
             $table->timestamp('ends_at')->nullable();
+            $table->boolean('is_conflict')->default(false);
             $table->string('status')->default('scheduled');
+            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('confirmed_by')->nullable()->constrained('users');
+            $table->foreignId('canceled_by')->nullable()->constrained('users');
             $table->timestamps();
         });
     }
