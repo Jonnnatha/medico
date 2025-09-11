@@ -19,7 +19,9 @@ class SurgeryFactory extends Factory
             'doctor_id' => User::factory(),
             'patient_name' => $this->faker->name(),
             'starts_at' => $this->faker->dateTimeBetween('+1 days', '+1 month'),
-            'ends_at' => $this->faker->dateTimeBetween('+1 month', '+2 months'),
+            'duration_min' => $this->faker->numberBetween(30, 240),
+            'surgery_type' => $this->faker->word(),
+            'room' => (string) $this->faker->numberBetween(1, 10),
             'status' => Surgery::STATUS_SCHEDULED,
         ];
     }

@@ -30,7 +30,9 @@ class SurgeryController extends Controller
         $data = $request->validate([
             'patient_name' => 'required|string',
             'starts_at' => 'required|date',
-            'ends_at' => 'nullable|date|after_or_equal:starts_at',
+            'duration_min' => 'required|integer|min:1',
+            'surgery_type' => 'required|string',
+            'room' => 'required|string',
             'doctor_id' => 'sometimes|exists:users,id',
         ]);
 
@@ -55,7 +57,9 @@ class SurgeryController extends Controller
         $data = $request->validate([
             'patient_name' => 'sometimes|string',
             'starts_at' => 'sometimes|date',
-            'ends_at' => 'nullable|date|after_or_equal:starts_at',
+            'duration_min' => 'sometimes|integer|min:1',
+            'surgery_type' => 'sometimes|string',
+            'room' => 'sometimes|string',
             'doctor_id' => 'sometimes|exists:users,id',
             'status' => 'sometimes|string',
         ]);
@@ -88,7 +92,10 @@ class SurgeryController extends Controller
         $user = $request->user();
         abort_unless($user->hasRole('admin') || $user->hasRole('nurse'), 403);
 
-        $surgery->update(['status' => Surgery::STATUS_CONFIRMED]);
+        $surgery->update([
+            'status' => Surgery::STATUS_CONFIRMED,
+            'confirmed_by' => $user->id,
+        ]);
 
         return response()->json($surgery);
     }
@@ -98,7 +105,10 @@ class SurgeryController extends Controller
         $user = $request->user();
         abort_unless($user->hasRole('admin') || $user->hasRole('nurse'), 403);
 
-        $surgery->update(['status' => Surgery::STATUS_CANCELLED]);
+        $surgery->update([
+            'status' => Surgery::STATUS_CANCELLED,
+            'canceled_by' => $user->id,
+        ]);
 
         return response()->json($surgery);
     }
