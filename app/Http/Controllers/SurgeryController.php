@@ -104,11 +104,16 @@ class SurgeryController extends Controller
     {
         $user = $request->user();
         abort_unless($user->hasRole('admin') || $user->hasRole('nurse'), 403);
+        abort_if($surgery->status !== Surgery::STATUS_SCHEDULED, 400);
 
         $surgery->update([
             'status' => Surgery::STATUS_CONFIRMED,
             'confirmed_by' => $user->id,
+            'canceled_by' => null,
         ]);
+
+        $maxRooms = (int) Setting::getValue('max_rooms', 9);
+        $surgery->is_conflict = $this->hasConflict($surgery, $maxRooms);
 
         return response()->json($surgery);
     }
@@ -118,10 +123,16 @@ class SurgeryController extends Controller
         $user = $request->user();
         abort_unless($user->hasRole('admin') || $user->hasRole('nurse'), 403);
 
+        abort_if($surgery->status === Surgery::STATUS_CANCELLED, 400);
+
         $surgery->update([
             'status' => Surgery::STATUS_CANCELLED,
             'canceled_by' => $user->id,
+            'confirmed_by' => null,
         ]);
+
+        $maxRooms = (int) Setting::getValue('max_rooms', 9);
+        $surgery->is_conflict = $this->hasConflict($surgery, $maxRooms);
 
         return response()->json($surgery);
     }
