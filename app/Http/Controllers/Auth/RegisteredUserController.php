@@ -44,6 +44,8 @@ class RegisteredUserController extends Controller
             'role' => User::ROLE_PATIENT,
         ]);
 
+        $user->assignRole(User::ROLE_PATIENT);
+
         event(new Registered($user));
 
         Auth::login($user);

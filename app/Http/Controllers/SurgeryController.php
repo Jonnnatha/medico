@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Surgery;
 use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SurgeryController extends Controller
@@ -14,7 +15,7 @@ class SurgeryController extends Controller
         $maxRooms = (int) Setting::getValue('max_rooms', 9);
         $query = Surgery::query();
 
-        if ($user->hasRole('doctor')) {
+        if ($user->hasRole(User::ROLE_DOCTOR)) {
             $query->where('doctor_id', $user->id);
         }
 
@@ -32,7 +33,7 @@ class SurgeryController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
-        abort_unless($user->hasRole('admin') || $user->hasRole('doctor'), 403);
+        abort_unless($user->hasRole(User::ROLE_ADMIN) || $user->hasRole(User::ROLE_DOCTOR), 403);
 
         $maxRooms = (int) Setting::getValue('max_rooms', 9);
         $data = $request->validate([
@@ -44,7 +45,7 @@ class SurgeryController extends Controller
             'room' => 'required|integer|min:1|max:' . $maxRooms,
         ]);
 
-        if ($user->hasRole('doctor')) {
+        if ($user->hasRole(User::ROLE_DOCTOR)) {
             $data['doctor_id'] = $user->id;
         }
 
@@ -58,8 +59,8 @@ class SurgeryController extends Controller
     {
         $user = $request->user();
         abort_unless(
-            $user->hasRole('admin') ||
-                ($user->hasRole('doctor') && $surgery->doctor_id === $user->id),
+            $user->hasRole(User::ROLE_ADMIN) ||
+                ($user->hasRole(User::ROLE_DOCTOR) && $surgery->doctor_id === $user->id),
             403
         );
 
@@ -74,7 +75,7 @@ class SurgeryController extends Controller
             'room' => 'required|integer|min:1|max:' . $maxRooms,
         ]);
 
-        if ($user->hasRole('doctor')) {
+        if ($user->hasRole(User::ROLE_DOCTOR)) {
             unset($data['doctor_id']);
         }
 
@@ -88,8 +89,8 @@ class SurgeryController extends Controller
     {
         $user = $request->user();
         abort_unless(
-            $user->hasRole('admin') ||
-                ($user->hasRole('doctor') && $surgery->doctor_id === $user->id),
+            $user->hasRole(User::ROLE_ADMIN) ||
+                ($user->hasRole(User::ROLE_DOCTOR) && $surgery->doctor_id === $user->id),
             403
         );
 
@@ -101,7 +102,7 @@ class SurgeryController extends Controller
     public function confirm(Request $request, Surgery $surgery)
     {
         $user = $request->user();
-        abort_unless($user->hasRole('admin') || $user->hasRole('nurse'), 403);
+        abort_unless($user->hasRole(User::ROLE_ADMIN) || $user->hasRole(User::ROLE_NURSE), 403);
         abort_if($surgery->status !== Surgery::STATUS_SCHEDULED, 400);
 
         $surgery->update([
@@ -119,7 +120,7 @@ class SurgeryController extends Controller
     public function cancel(Request $request, Surgery $surgery)
     {
         $user = $request->user();
-        abort_unless($user->hasRole('admin') || $user->hasRole('nurse'), 403);
+        abort_unless($user->hasRole(User::ROLE_ADMIN) || $user->hasRole(User::ROLE_NURSE), 403);
 
         abort_if($surgery->status === Surgery::STATUS_CANCELLED, 400);
 
