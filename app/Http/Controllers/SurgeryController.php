@@ -40,7 +40,6 @@ class SurgeryController extends Controller
             'starts_at' => 'required|date',
             'duration_min' => 'required|integer|min:1',
             'surgery_type' => 'required|string',
-            'room' => 'required|string',
             'doctor_id' => 'sometimes|exists:users,id',
             'room' => 'required|integer|min:1|max:' . $maxRooms,
         ]);
@@ -70,10 +69,9 @@ class SurgeryController extends Controller
             'starts_at' => 'sometimes|date',
             'duration_min' => 'sometimes|integer|min:1',
             'surgery_type' => 'sometimes|string',
-            'room' => 'sometimes|string',
             'doctor_id' => 'sometimes|exists:users,id',
             'status' => 'sometimes|string',
-            'room' => 'sometimes|integer|min:1|max:' . $maxRooms,
+            'room' => 'required|integer|min:1|max:' . $maxRooms,
         ]);
 
         if ($user->hasRole('doctor')) {

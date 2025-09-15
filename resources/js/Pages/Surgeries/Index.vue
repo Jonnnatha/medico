@@ -18,7 +18,7 @@ const props = defineProps({
 const form = ref({
     patient: '',
     type: '',
-    room: '',
+    room: null,
     start: '',
     duration: '',
 });
@@ -81,7 +81,7 @@ const cancelSurgery = (surgery) => router.post(`/surgeries/${surgery.id}/cancel`
                         </div>
                         <div>
                             <InputLabel for="room" value="Sala" />
-                            <select id="room" v-model="form.room" class="mt-1 block w-full border-gray-300 rounded-md">
+                            <select id="room" v-model.number="form.room" class="mt-1 block w-full border-gray-300 rounded-md">
                                 <option value="" disabled>Selecione</option>
                                 <option v-for="n in roomNumbers" :key="n" :value="n">{{ n }}</option>
                             </select>
