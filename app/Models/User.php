@@ -16,6 +16,7 @@ class User extends Authenticatable
     public const ROLE_PATIENT = 'patient';
     public const ROLE_DOCTOR = 'doctor';
     public const ROLE_ADMIN = 'admin';
+    public const ROLE_NURSE = 'nurse';
 
     /**
      * The attributes that are mass assignable.
@@ -63,5 +64,10 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function isNurse(): bool
+    {
+        return $this->role === self::ROLE_NURSE;
     }
 }

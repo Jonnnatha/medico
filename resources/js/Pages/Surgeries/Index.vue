@@ -32,9 +32,9 @@ const submit = () => {
 
 const roomNumbers = computed(() => Array.from({ length: props.rooms || 0 }, (_, i) => i + 1));
 
-const canEdit = (surgery) => role === 'ADM' || (role === 'Médico' && surgery.created_by_id === user.id);
+const canEdit = (surgery) => role === 'admin' || (role === 'doctor' && surgery.created_by_id === user.id);
 const canDelete = canEdit;
-const canConfirm = (surgery) => role === 'ADM' || role === 'Enfermeiro';
+const canConfirm = (surgery) => role === 'admin' || role === 'nurse';
 const canCancel = canConfirm;
 
 const statusClass = (surgery) => {
