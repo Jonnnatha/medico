@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('surgeries', function (Blueprint $table) {
             $table->string('surgery_type')->nullable();
-            $table->string('room')->nullable();
+            $table->unsignedInteger('room')->default(1);
             $table->unsignedInteger('duration_min')->nullable();
             $table->boolean('is_conflict')->default(false);
             $table->foreignId('confirmed_by')->nullable()->constrained('users');
