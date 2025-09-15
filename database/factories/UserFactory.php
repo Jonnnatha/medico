@@ -34,6 +34,13 @@ class UserFactory extends Factory
         ];
     }
 
+    public function nurse(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => User::ROLE_NURSE,
+        ]);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */
