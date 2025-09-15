@@ -22,7 +22,6 @@ class Surgery extends Model
         'ends_at',
         'status',
         'surgery_type',
-        'room',
         'duration_min',
         'is_conflict',
         'confirmed_by',
